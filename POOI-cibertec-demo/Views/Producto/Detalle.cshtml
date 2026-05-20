@@ -1,0 +1,50 @@
+﻿@model POOI_cibertec_demo.Models.ProductoOferta
+
+<h2>Detalle del producto</h2>
+
+<form method="post" class="col-lg-4">
+    <div class="mt-2">
+        <label class="form-label">Nombre</label>
+        <input class="form-control" asp-for="Nombre" readonly />
+    </div>
+    <div class="mt-2">
+        <label class="form-label">Precio</label>
+        <input class="form-control" id="precioInput" asp-for="Precio" disabled />
+    </div>
+    <div class="mt-2">
+        <label class="form-label">Cantidad</label>
+        <input class="form-control" asp-for="Cantidad" readonly />
+    </div>
+    <div class="mt-2">
+        <label class="form-label">Categoría</label>
+        <input class="form-control" asp-for="Categoria" readonly />
+    </div>
+    <div class="mt-2">
+        <label class="form-label">Estado</label>
+        <select class="form-select" asp-for="Estado">
+            <option>Pendiente</option>
+            <option>Comprado</option>
+        </select>
+    </div>
+    <div class="mt-2">
+        <label class="form-label">Descuento</label>
+        <input class="form-control" asp-for="Descuento" />
+    </div>
+    <div class="mt-2">
+        <label class="form-label">¿Cambió el precio?</label>
+        <input type="checkbox" asp-for="PrecioCambio" id="precioCambioCheck" />
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-success">Calcular Total</button>
+    </div>
+</form>
+<hr />
+<p>Subtotal: @(((decimal?)ViewBag.Subtotal ?? 0).ToString("0.00"))</p>
+<p>Total: @(((decimal?)ViewBag.Total ?? 0).ToString("0.00"))</p>
+<script>
+    const checkPrecio = document.getElementById("precioCambioCheck");
+    const inputPrecio = document.getElementById("precioInput");
+    checkPrecio.addEventListener("change", function() {
+        inputPrecio.disabled = !this.checked;
+    });
+</script>

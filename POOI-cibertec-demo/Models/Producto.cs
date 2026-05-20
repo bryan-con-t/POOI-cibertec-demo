@@ -18,13 +18,8 @@
             return Math.Round(Precio * Cantidad, 2);
         }
 
-        public decimal CalcularTotal() {
+        public virtual decimal CalcularTotal() {
             return CalcularSubtotal();
-        }
-
-        public decimal CalcularTotal(decimal descuento)
-        {
-            return Math.Round(CalcularSubtotal() - descuento, 2);
         }
     }
 }
