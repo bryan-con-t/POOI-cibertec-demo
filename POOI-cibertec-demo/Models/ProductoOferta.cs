@@ -1,4 +1,5 @@
-﻿using POOI_cibertec_demo.Interfaces;
+﻿using POOI_cibertec_demo.Exceptions;
+using POOI_cibertec_demo.Interfaces;
 
 namespace POOI_cibertec_demo.Models
 {
@@ -10,7 +11,16 @@ namespace POOI_cibertec_demo.Models
 
         public override decimal CalcularTotal()
         {
-            decimal total = CalcularSubtotal() - Descuento;
+            decimal subtotal = CalcularSubtotal();
+            if (Descuento < 0)
+            {
+                throw new DescuentoInvalidoException("El descuento no puede ser negativo.");
+            }
+            if (Descuento > subtotal)
+            {
+                throw new DescuentoInvalidoException("El descuento no puede ser mayor al subtotal.");
+            }
+            decimal total = subtotal - Descuento;
             return Math.Round(total, 2);
         }
 

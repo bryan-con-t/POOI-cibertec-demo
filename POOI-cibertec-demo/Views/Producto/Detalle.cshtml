@@ -1,7 +1,10 @@
 ﻿@model POOI_cibertec_demo.Models.ProductoOferta
 
 <h2>Detalle del producto</h2>
-
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
 <form method="post" class="col-lg-4">
     <div class="mt-2">
         <label class="form-label">Nombre</label>
@@ -44,7 +47,9 @@
 <script>
     const checkPrecio = document.getElementById("precioCambioCheck");
     const inputPrecio = document.getElementById("precioInput");
-    checkPrecio.addEventListener("change", function() {
-        inputPrecio.disabled = !this.checked;
-    });
+    function actualizarEstadoPrecio() {
+        inputPrecio.disabled = !checkPrecio.checked;
+    }
+    actualizarEstadoPrecio();
+    checkPrecio.addEventListener("change", actualizarEstadoPrecio);
 </script>

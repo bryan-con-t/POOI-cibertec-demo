@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using POOI_cibertec_demo.Exceptions;
 using POOI_cibertec_demo.Models;
 
 namespace POOI_cibertec_demo.Controllers
@@ -42,8 +43,25 @@ namespace POOI_cibertec_demo.Controllers
         [HttpPost]
         public IActionResult Detalle(ProductoOferta producto)
         {
-            ViewBag.Subtotal = producto.CalcularSubtotal();
-            ViewBag.Total = producto.CalcularTotal();
+            ViewBag.Subtotal = 0;
+            ViewBag.Total = 0;
+            try
+            {
+                ViewBag.Subtotal = producto.CalcularSubtotal();
+                ViewBag.Total = producto.CalcularTotal();
+            } catch (PrecioInvalidoException ex)
+            {
+                ViewBag.Error = ex.Message;
+            } catch (CantidadInvalidaException ex)
+            {
+                ViewBag.Error = ex.Message;
+            } catch (DescuentoInvalidoException ex)
+            {
+                ViewBag.Error = ex.Message;
+            } catch (Exception ex)
+            {
+                ViewBag.Error = "Ocurrió un error inesperado.";
+            }
             return View(producto);
         }
     }

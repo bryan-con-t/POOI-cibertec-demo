@@ -1,4 +1,6 @@
-﻿namespace POOI_cibertec_demo.Models
+﻿using POOI_cibertec_demo.Exceptions;
+
+namespace POOI_cibertec_demo.Models
 {
     public partial class Producto
     {
@@ -15,6 +17,14 @@
 
         public decimal CalcularSubtotal()
         {
+            if (Precio <= 0)
+            {
+                throw new PrecioInvalidoException();
+            }
+            if (Cantidad <= 0)
+            {
+                throw new CantidadInvalidaException();
+            }
             return Math.Round(Precio * Cantidad, 2);
         }
 
