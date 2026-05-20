@@ -1,0 +1,14 @@
+﻿@model POOI_cibertec_demo.Models.ProductoOferta
+
+@if (Model != null)
+{
+    <h2>Primer producto registrado</h2>
+    <ul>
+        <li>Nombre: @Model.Nombre</li>
+        <li>Categoría: @Model.Categoria</li>
+        <li>Estado: @Model.Estado</li>
+    </ul>
+} else
+{
+    <div class="alert alert-warning">No hay productos registrados.</div>
+}

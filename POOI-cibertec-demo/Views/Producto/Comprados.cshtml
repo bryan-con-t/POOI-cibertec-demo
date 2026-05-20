@@ -1,0 +1,22 @@
+﻿@model List<POOI_cibertec_demo.Models.ProductoOferta>
+
+<h2>Productos comprados</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var producto in Model)
+        {
+            <tr>
+                <td>@producto.Nombre</td>
+                <td>@producto.Estado</td>
+                <td>@producto.CalcularTotal().ToString("0.00")</td>
+            </tr>
+        }
+    </tbody>
+</table>

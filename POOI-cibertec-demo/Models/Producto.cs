@@ -31,5 +31,15 @@ namespace POOI_cibertec_demo.Models
         public virtual decimal CalcularTotal() {
             return CalcularSubtotal();
         }
+
+        public void MarcarComoComprado()
+        {
+            Estado = "Comprado";
+        }
+
+        public void MarcarComoPendiente()
+        {
+            Estado = "Pendiente";
+        }
     }
 }
