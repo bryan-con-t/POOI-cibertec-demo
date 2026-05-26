@@ -1,45 +1,71 @@
 ﻿@model List<POOI_cibertec_demo.Models.ProductoOferta>
 
 <h2>Lista de compras</h2>
-
+@if (TempData["Mensaje"] != null)
+{
+    <div id="mensajeTemporal" class="alert alert-success">@TempData["Mensaje"]</div>
+}
 <a class="btn btn-primary" asp-action="Registro">Agregar nuevo producto</a>
 <a class="btn btn-success" asp-action="Comprados">Ver comprados</a>
 <a class="btn btn-secondary" asp-action="PrimerProducto">Ver primer producto</a>
 <a class="btn btn-dark" asp-action="Nombres">Ver nombres</a>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Categoria</th>
-            <th>Estado</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var producto in Model)
-        {
+<a class="btn btn-info" asp-action="Historial">Ver historial</a>
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-3">No hay productos en la lista</div>
+} else
+{
+    <table class="table table-bordered mt-3">
+        <thead>
             <tr>
-                <td>@producto.Nombre</td>
-                <td>@producto.Precio</td>
-                <td>@producto.Cantidad</td>
-                <td>@producto.Categoria</td>
-                <td>@if (producto.Estado == "Comprado") {
-                        <span class="badge bg-success">Comprado</span>
-                    } else
-                    {
-                        <span class="badge bg-warning text-dark">Pendiente</span>
-                    }
-                </td>
-                <td>S/ @producto.CalcularTotal().ToString("0.00")</td>
-                <td>
-                    <a class="btn btn-warning" asp-action="Editar" asp-route-nombre="@producto.Nombre">Editar</a>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-nombre="@producto.Nombre">Eliminar</a>
-                </td>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Categoria</th>
+                <th>Estado</th>
+                <th>Total</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var producto in Model)
+            {
+                <tr>
+                    <td>@producto.Nombre</td>
+                    <td>@producto.Precio</td>
+                    <td>@producto.Cantidad</td>
+                    <td>@producto.Categoria</td>
+                    <td>
+                        @if (producto.Estado == "Comprado")
+                        {
+                            <span class="badge bg-success">Comprado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        }
+                    </td>
+                    <td>S/ @producto.CalcularTotal().ToString("0.00")</td>
+                    <td>
+                        <a class="btn btn-warning" asp-action="Editar" asp-route-nombre="@producto.Nombre">Editar</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-nombre="@producto.Nombre">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-warning" asp-action="ProcesarCompra">Procesar compra</a>
+}
+<script>
+    setTimeout(() => {
+        const mensaje = document.getElementById("mensajeTemporal");
+        if (mensaje) {
+            mensaje.style.transition = "opacity 1s";
+            mensaje.style.opacity = "0";
+            setTimeout(() => {
+                mensaje.style.display = "none";
+            }, 1000);
         }
-    </tbody>
-</table>
+    }, 5000);
+</script>

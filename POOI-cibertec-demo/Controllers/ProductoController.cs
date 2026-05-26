@@ -2,11 +2,19 @@
 using POOI_cibertec_demo.Data;
 using POOI_cibertec_demo.Exceptions;
 using POOI_cibertec_demo.Models;
+using POOI_cibertec_demo.Services;
+using System.Threading.Tasks;
 
 namespace POOI_cibertec_demo.Controllers
 {
     public class ProductoController : Controller
     {
+        private readonly CompraService _compraService;
+
+        public ProductoController()
+        {
+            _compraService = new CompraService();
+        }
         public IActionResult Registro()
         {
             Producto producto = new Producto();
@@ -131,6 +139,25 @@ namespace POOI_cibertec_demo.Controllers
                 return RedirectToAction("Lista");
             }
             return View("Detalle", producto);
+        }
+
+        public async Task<IActionResult> Guardar()
+        {
+            ViewBag.Mensaje = await _compraService.GuardarCompraAsync();
+            return View();
+        }
+
+        public async Task<IActionResult> Historial()
+        {
+            var productos = await _compraService.ObtenerHistorialAsync();
+            return View(productos);
+        }
+
+        public async Task<IActionResult> ProcesarCompra()
+        {
+            TempData["Mensaje"] = await _compraService.ProcesarCompraAsync();
+            ListaComprasData.Productos.Clear();
+            return RedirectToAction("Lista");
         }
     }
 }
