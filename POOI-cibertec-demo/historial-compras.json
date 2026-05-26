@@ -1,0 +1,22 @@
+[
+  {
+    "Descuento": 0.00,
+    "PrecioCambio": false,
+    "PrecioAnterior": 0.0,
+    "Nombre": "Arroz",
+    "Precio": 5.2,
+    "Cantidad": 5,
+    "Categoria": "Abarrotes",
+    "Estado": "Pendiente"
+  },
+  {
+    "Descuento": 0.00,
+    "PrecioCambio": false,
+    "PrecioAnterior": 0.0,
+    "Nombre": "Avena",
+    "Precio": 9.5,
+    "Cantidad": 5,
+    "Categoria": "Abarrotes",
+    "Estado": "Pendiente"
+  }
+]

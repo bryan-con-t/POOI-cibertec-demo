@@ -10,6 +10,7 @@
 <a class="btn btn-secondary" asp-action="PrimerProducto">Ver primer producto</a>
 <a class="btn btn-dark" asp-action="Nombres">Ver nombres</a>
 <a class="btn btn-info" asp-action="Historial">Ver historial</a>
+<a class="btn btn-warning" asp-action="CargarHistorial">Cargar productos JSON</a>
 @if (!Model.Any())
 {
     <div class="alert alert-info mt-3">No hay productos en la lista</div>
@@ -56,6 +57,7 @@
         </tbody>
     </table>
     <a class="btn btn-warning" asp-action="ProcesarCompra">Procesar compra</a>
+    <a class="btn btn-danger" asp-action="ExportarJson">Exportar JSON</a>
 }
 <script>
     setTimeout(() => {

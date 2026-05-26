@@ -10,10 +10,12 @@ namespace POOI_cibertec_demo.Controllers
     public class ProductoController : Controller
     {
         private readonly CompraService _compraService;
+        private readonly JsonService _jsonService;
 
         public ProductoController()
         {
             _compraService = new CompraService();
+            _jsonService = new JsonService();
         }
         public IActionResult Registro()
         {
@@ -157,6 +159,27 @@ namespace POOI_cibertec_demo.Controllers
         {
             TempData["Mensaje"] = await _compraService.ProcesarCompraAsync();
             ListaComprasData.Productos.Clear();
+            return RedirectToAction("Lista");
+        }
+
+        public IActionResult ExportarJson()
+        {
+            string json = _jsonService.ConvertirAJson(ListaComprasData.Productos);
+            ViewBag.Json = json;
+            return View();
+        }
+
+        public IActionResult GuardarHistorial()
+        {
+            _jsonService.GuardarJson(ListaComprasData.Productos);
+            TempData["Mensaje"] = "Historial guardado en JSON.";
+            return RedirectToAction("Lista");
+        }
+
+        public IActionResult CargarHistorial()
+        {
+            ListaComprasData.Productos = _jsonService.LeerArchivoJson();
+            TempData["Mensaje"] = "Historial cargado.";
             return RedirectToAction("Lista");
         }
     }
