@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using POOI_cibertec_demo.Data;
 using POOI_cibertec_demo.Exceptions;
 using POOI_cibertec_demo.Models;
 using POOI_cibertec_demo.Services;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace POOI_cibertec_demo.Controllers
@@ -220,6 +222,35 @@ namespace POOI_cibertec_demo.Controllers
                 TempData["Mensaje"] = "Productos importados correctamente desde Excel.";
                 return RedirectToAction("Lista");
             }
+        }
+
+        public IActionResult ListaDesconectada()
+        {
+            DataSet ds = _productoADO.ObtenerProductosDS();
+            return View(ds);
+        }
+
+        public IActionResult CompradosDS()
+        {
+            DataSet ds = _productoADO.ObtenerProductosDS();
+            DataView dv = new DataView(ds.Tables["Productos"]);
+            dv.RowFilter = "Estado='Comprado'";
+            return View(dv);
+        }
+
+        public IActionResult AplicarDescuento()
+        {
+            DataSet ds = _productoADO.ObtenerProductosDS();
+            foreach (DataRow fila in ds.Tables["Productos"].Rows)
+            {
+                if (fila["Categoria"].ToString() == "Limpieza")
+                {
+                    decimal precio = Convert.ToDecimal(fila["Precio"]);
+                    fila["precio"] = precio * 0.9m;
+                }
+            }
+            _productoADO.ActualizarDataSet(ds);
+            return RedirectToAction("Lista");
         }
     }
 }

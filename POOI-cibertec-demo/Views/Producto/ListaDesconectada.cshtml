@@ -1,0 +1,22 @@
+﻿@model System.Data.DataSet
+
+<h2>Lista desconectada</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow fila in Model.Tables["Productos"].Rows)
+        {
+            <tr>
+                <td>@fila["Nombre"]</td>
+                <td>@fila["Precio"]</td>
+                <td>@fila["Cantidad"]</td>
+            </tr>
+        }
+    </tbody>
+</table>

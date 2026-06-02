@@ -136,5 +136,28 @@ namespace POOI_cibertec_demo.Data
                 }
             }
         }
+
+        public DataSet ObtenerProductosDS()
+        {
+            DataSet ds = new DataSet();
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                string sql = "SELECT * FROM Producto";
+                SqlDataAdapter da = new SqlDataAdapter(sql, cn);
+                da.Fill(ds, "Productos");
+            }
+            return ds;
+        }
+
+        public void ActualizarDataSet(DataSet ds)
+        {
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                string sql = "SELECT * FROM Producto";
+                SqlDataAdapter da = new SqlDataAdapter(sql, cn);
+                SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                da.Update(ds, "Productos");
+            }
+        }
     }
 }

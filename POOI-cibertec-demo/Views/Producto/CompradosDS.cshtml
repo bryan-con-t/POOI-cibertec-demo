@@ -1,0 +1,19 @@
+﻿@model System.Data.DataView
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRowView fila in Model)
+        {
+            <tr>
+                <td>@fila["Nombre"]</td>
+                <td>@fila["Estado"]</td>
+            </tr>
+        }
+    </tbody>
+</table>
