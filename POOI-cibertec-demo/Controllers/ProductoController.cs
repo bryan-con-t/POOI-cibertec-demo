@@ -12,12 +12,15 @@ namespace POOI_cibertec_demo.Controllers
         private readonly CompraService _compraService;
         private readonly JsonService _jsonService;
         private readonly ArchivoService _archivoService;
+        private readonly ProductoADO _productoADO;
 
-        public ProductoController()
+        public ProductoController(IConfiguration configuration)
         {
             _compraService = new CompraService();
             _jsonService = new JsonService();
             _archivoService = new ArchivoService();
+            string cadenaConexion = configuration.GetConnectionString("CibertecDemoConnection");
+            _productoADO = new ProductoADO(cadenaConexion);
         }
         public IActionResult Registro()
         {
@@ -74,6 +77,7 @@ namespace POOI_cibertec_demo.Controllers
                 if (productoExistente == null)
                 {
                     ListaComprasData.Productos.Add(producto);
+                    _productoADO.Registrar(producto);
                 }
                 else
                 {
@@ -103,7 +107,7 @@ namespace POOI_cibertec_demo.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Ocurrió un error inesperado.";
+                ViewBag.Error = ex.Message;
                 return View(producto);
             }
         }

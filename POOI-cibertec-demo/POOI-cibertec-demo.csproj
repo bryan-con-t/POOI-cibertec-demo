@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aspose.Cells" Version="26.5.1" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
