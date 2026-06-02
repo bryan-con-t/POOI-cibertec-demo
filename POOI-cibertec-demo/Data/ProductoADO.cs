@@ -17,9 +17,9 @@ namespace POOI_cibertec_demo.Data
         {
             using (SqlConnection cn = new SqlConnection(_cadenaConexion))
             {
-                string sql = @"INSERT INTO Producto (Nombre, Precio, Cantidad, Categoria, Estado, Descuento) 
-                    VALUES (@Nombre, @Precio, @Cantidad, @Categoria, @Estado, @Descuento)";
+                string sql = "sp_RegistrarProducto";
                 SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
                 cmd.Parameters.AddWithValue("@Precio", producto.Precio);
                 cmd.Parameters.AddWithValue("@Cantidad", producto.Cantidad);
@@ -81,6 +81,60 @@ namespace POOI_cibertec_demo.Data
                 }
             }
             return producto;
+        }
+
+        public void Actualizar(ProductoOferta producto)
+        {
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                string sql = "sp_ActualizarProducto";
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("@Precio", producto.Precio);
+                cmd.Parameters.AddWithValue("@Cantidad", producto.Cantidad);
+                cmd.Parameters.AddWithValue("@Categoria", producto.Categoria);
+                cmd.Parameters.AddWithValue("@Estado", producto.Estado);
+                cmd.Parameters.AddWithValue("@Descuento", producto.Descuento);
+                cn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void Eliminar(string nombre)
+        {
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                string sql = "sp_EliminarProducto";
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void ProcesarCompra()
+        {
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                cn.Open();
+                SqlTransaction transaction = cn.BeginTransaction();
+                try
+                {
+                    string sqlInsert = "INSERT INTO HistorialCompra (Nombre, Precio, Cantidad, Fecha) SELECT Nombre, Precio, Cantidad, GETDATE() FROM Producto";
+                    SqlCommand cmdInsert = new SqlCommand(sqlInsert, cn, transaction);
+                    cmdInsert.ExecuteNonQuery();
+                    string sqlDelete = "DELETE FROM Producto";
+                    SqlCommand cmdDelete = new SqlCommand(sqlDelete, cn, transaction);
+                    cmdDelete.ExecuteNonQuery();
+                    transaction.Commit();
+                } catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }

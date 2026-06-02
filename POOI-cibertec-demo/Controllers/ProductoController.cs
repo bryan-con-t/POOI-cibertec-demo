@@ -81,12 +81,7 @@ namespace POOI_cibertec_demo.Controllers
                 }
                 else
                 {
-                    productoExistente.Precio = producto.Precio;
-                    productoExistente.Cantidad = producto.Cantidad;
-                    productoExistente.Categoria = producto.Categoria;
-                    productoExistente.Estado = producto.Estado;
-                    productoExistente.Descuento = producto.Descuento;
-                    productoExistente.PrecioCambio = producto.PrecioCambio;
+                    _productoADO.Actualizar(producto);
                 }
                 return RedirectToAction("Lista");
             }
@@ -120,11 +115,7 @@ namespace POOI_cibertec_demo.Controllers
 
         public IActionResult Eliminar(string nombre)
         {
-            var producto = ListaComprasData.Productos.FirstOrDefault(p => p.Nombre == nombre);
-            if (producto != null)
-            {
-                ListaComprasData.Productos.Remove(producto);
-            }
+            _productoADO.Eliminar(nombre);
             return RedirectToAction("Lista");
         }
 
@@ -170,8 +161,8 @@ namespace POOI_cibertec_demo.Controllers
 
         public async Task<IActionResult> ProcesarCompra()
         {
-            TempData["Mensaje"] = await _compraService.ProcesarCompraAsync();
-            ListaComprasData.Productos.Clear();
+            _productoADO.ProcesarCompra();
+            TempData["Mensaje"] = "Compra procesada.";
             return RedirectToAction("Lista");
         }
 
