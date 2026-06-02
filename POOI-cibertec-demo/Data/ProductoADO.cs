@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using POOI_cibertec_demo.Models;
+using System.Data;
 
 namespace POOI_cibertec_demo.Data
 {
@@ -28,6 +29,58 @@ namespace POOI_cibertec_demo.Data
                 cn.Open();
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public List<ProductoOferta> Listar()
+        {
+            List<ProductoOferta> productos = new List<ProductoOferta>();
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                string sql = "sp_listarProductos";
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    ProductoOferta producto = new ProductoOferta();
+                    producto.Nombre = dr["Nombre"].ToString();
+                    producto.Precio = Convert.ToDecimal(dr["Precio"]);
+                    producto.Cantidad = Convert.ToInt32(dr["Cantidad"]);
+                    producto.Categoria = dr["Categoria"].ToString();
+                    producto.Estado = dr["Estado"].ToString();
+                    producto.Descuento = Convert.ToDecimal(dr["Descuento"]);
+                    productos.Add(producto);
+                }
+            }
+            return productos;
+        }
+
+        public ProductoOferta Buscar(string nombre)
+        {
+            ProductoOferta producto = null;
+            using (SqlConnection cn = new SqlConnection(_cadenaConexion))
+            {
+                string sql = "sp_BuscarProducto";
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    producto = new ProductoOferta()
+                    {
+                        Nombre = dr["Nombre"].ToString(),
+                        Precio = Convert.ToDecimal(dr["Precio"]),
+                        Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                        Categoria = dr["Categoria"].ToString(),
+                        Estado = dr["Estado"].ToString(),
+                        Descuento = Convert.ToDecimal(dr["Descuento"])
+                    };
+                }
+            }
+            return producto;
         }
     }
 }

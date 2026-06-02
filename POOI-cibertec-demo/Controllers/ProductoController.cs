@@ -114,7 +114,8 @@ namespace POOI_cibertec_demo.Controllers
 
         public IActionResult Lista()
         {
-            return View(ListaComprasData.Productos);
+            var productos = _productoADO.Listar();
+            return View(productos);
         }
 
         public IActionResult Eliminar(string nombre)
@@ -147,7 +148,7 @@ namespace POOI_cibertec_demo.Controllers
 
         public IActionResult Editar(string nombre)
         {
-            var producto = ListaComprasData.Productos.FirstOrDefault(p => p.Nombre == nombre);
+            var producto = _productoADO.Buscar(nombre);
             if (producto == null)
             {
                 return RedirectToAction("Lista");
