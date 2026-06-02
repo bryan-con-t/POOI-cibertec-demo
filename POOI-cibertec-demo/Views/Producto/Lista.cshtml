@@ -11,6 +11,16 @@
 <a class="btn btn-dark" asp-action="Nombres">Ver nombres</a>
 <a class="btn btn-info" asp-action="Historial">Ver historial</a>
 <a class="btn btn-warning" asp-action="CargarHistorial">Cargar productos JSON</a>
+<form asp-action="ImportarExcel" method="post" enctype="multipart/form-data">
+    <div class="row my-3">
+        <div class="col-md-4">
+            <input type="file" name="archivo" class="form-control" accept=".xlsx" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-danger">Importar excel</button>
+        </div>
+    </div>
+</form>
 @if (!Model.Any())
 {
     <div class="alert alert-info mt-3">No hay productos en la lista</div>
@@ -58,6 +68,9 @@
     </table>
     <a class="btn btn-warning" asp-action="ProcesarCompra">Procesar compra</a>
     <a class="btn btn-danger" asp-action="ExportarJson">Exportar JSON</a>
+    <a class="btn btn-primary" asp-action="GenerarReporte">Generar reporte TXT</a>
+    <a class="btn btn-secondary" asp-action="VerReporte">Ver reporte TXT</a>
+    <a class="btn btn-success" asp-action="ExportarExcel">Exportar Excel</a>
 }
 <script>
     setTimeout(() => {

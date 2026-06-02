@@ -1,0 +1,14 @@
+﻿REPORTE DE COMPRAS
+====================
+Producto: Arroz
+Precio: S/ 5.20
+Cantidad: 5
+Estado: Pendiente
+Total: S/ 26.00
+--------------------
+Producto: Avena
+Precio: S/ 9.50
+Cantidad: 5
+Estado: Pendiente
+Total: S/ 47.50
+--------------------

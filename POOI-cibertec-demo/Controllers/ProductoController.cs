@@ -11,11 +11,13 @@ namespace POOI_cibertec_demo.Controllers
     {
         private readonly CompraService _compraService;
         private readonly JsonService _jsonService;
+        private readonly ArchivoService _archivoService;
 
         public ProductoController()
         {
             _compraService = new CompraService();
             _jsonService = new JsonService();
+            _archivoService = new ArchivoService();
         }
         public IActionResult Registro()
         {
@@ -63,7 +65,8 @@ namespace POOI_cibertec_demo.Controllers
                 if (producto.Estado == "Comprado")
                 {
                     producto.MarcarComoComprado();
-                } else
+                }
+                else
                 {
                     producto.MarcarComoPendiente();
                 }
@@ -71,7 +74,8 @@ namespace POOI_cibertec_demo.Controllers
                 if (productoExistente == null)
                 {
                     ListaComprasData.Productos.Add(producto);
-                } else
+                }
+                else
                 {
                     productoExistente.Precio = producto.Precio;
                     productoExistente.Cantidad = producto.Cantidad;
@@ -81,25 +85,29 @@ namespace POOI_cibertec_demo.Controllers
                     productoExistente.PrecioCambio = producto.PrecioCambio;
                 }
                 return RedirectToAction("Lista");
-            } catch (PrecioInvalidoException ex)
+            }
+            catch (PrecioInvalidoException ex)
             {
                 ViewBag.Error = ex.Message;
                 return View(producto);
-            } catch (CantidadInvalidaException ex)
+            }
+            catch (CantidadInvalidaException ex)
             {
                 ViewBag.Error = ex.Message;
                 return View(producto);
-            } catch (DescuentoInvalidoException ex)
+            }
+            catch (DescuentoInvalidoException ex)
             {
                 ViewBag.Error = ex.Message;
                 return View(producto);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 ViewBag.Error = "Ocurrió un error inesperado.";
                 return View(producto);
             }
         }
-        
+
         public IActionResult Lista()
         {
             return View(ListaComprasData.Productos);
@@ -181,6 +189,41 @@ namespace POOI_cibertec_demo.Controllers
             ListaComprasData.Productos = _jsonService.LeerArchivoJson();
             TempData["Mensaje"] = "Historial cargado.";
             return RedirectToAction("Lista");
+        }
+
+        public IActionResult GenerarReporte()
+        {
+            _archivoService.GenerarReporteTxt(ListaComprasData.Productos);
+            TempData["Mensaje"] = "Reporte generado en formato .txt.";
+            return RedirectToAction("Lista");
+        }
+
+        public IActionResult VerReporte()
+        {
+            ViewBag.Contenido = _archivoService.LeerReporteTxt();
+            return View();
+        }
+
+        public IActionResult ExportarExcel()
+        {
+            var archivoExcel = _archivoService.ExportarExcel(ListaComprasData.Productos);
+            return File(archivoExcel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "reporte-compras.xlsx");
+        }
+
+        public IActionResult ImportarExcel(IFormFile archivo)
+        {
+            if (archivo == null || archivo.Length == 0)
+            {
+                TempData["Mensaje"] = "Seleccione un archivo.";
+                return RedirectToAction("Lista");
+            }
+            using (var stream = archivo.OpenReadStream())
+            {
+                var productos = _archivoService.LeerExcel(stream);
+                ListaComprasData.Productos.AddRange(productos);
+                TempData["Mensaje"] = "Productos importados correctamente desde Excel.";
+                return RedirectToAction("Lista");
+            }
         }
     }
 }
